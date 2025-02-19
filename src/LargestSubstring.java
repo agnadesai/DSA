@@ -1,29 +1,28 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class LargestSubstring {
     public static int lengthOfLongestSubstring(String s) {
-        int n = s.length(), ans = 0;
+        Set<Character> hashSet = new HashSet<Character>();
+        int maxLength = 0;
+        int left = 0;
 
-        Map<Character, Integer> map = new HashMap<>();
-        // s to character array - forloop (add to hashmap)
-        for (int j = 0, i = 0; j < n; j++) {
-            if (map.containsKey(s.charAt(j))) {
-                System.out.println(" j " + s.charAt(j));
-                System.out.println("charToNextIndex.get(s.charAt(j))"+ map.get(s.charAt(j)));
-                i = Math.max(map.get(s.charAt(j)), i);
-
+        for(int right = 0; right<s.length(); right++) {
+            if(!hashSet.contains(s.charAt(right))) {
+                hashSet.add(s.charAt(right));
+                maxLength = Math.max(maxLength, right-left+1);
+            } else {
+                while(s.charAt(left)!= s.charAt(right)) {
+                    hashSet.remove(s.charAt(left));
+                    left++;
+                }
+                hashSet.remove(s.charAt(left));
+                left++;
+                hashSet.add(s.charAt(right));
             }
-            ans = Math.max(ans, j - i + 1);
-            map.put(s.charAt(j), j + 1);
         }
-        //map.keySet().size();
-//    }
-       return ans;
+        return maxLength;
     }
-
     public static void main(String[] args) {
 
         int a = lengthOfLongestSubstring("pwwkew");
