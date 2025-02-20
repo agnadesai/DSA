@@ -4,30 +4,26 @@ import java.util.List;
 
 public class SubstringLexicalOrder {
     /// ecbdca -cbd
-    public static String findSmallestSubstring(String str) {
+    public static Integer findMaxChainLength(String str) {
         List<String> longestSubstring = new ArrayList<>();
         int maxLength = 0;
         int left = 0;
         String maxString = "";
-        for(int right = str.length()-1; right!=0; right--) {
-            if((int) str.charAt(left) < (int)str.charAt(right)) {
-                longestSubstring.add(str.substring(right-left));
-            } else {
-                left++;
+
+        for(int i = 0; i < str.length()-1; i++) {
+            for(int j=i+1; j<str.length(); j++) {
+                if(str.charAt(i) < str.charAt(j)) {
+                    maxLength = Math.max(maxLength, j-i+1);
+                }
             }
         }
-       for(String longest: longestSubstring) {
-           if(longest.length()> maxString.length()) {
-               maxString = longest;
-           }
-       }
-       System.out.println("max"+ maxString);
-       return maxString;
+
+       return maxLength;
     }
 
     public static void main(String[] args) {
-        String input = "ecbdca";
-        System.out.println("Lexicographically smallest substring: " + findSmallestSubstring(input));
+        String input = "abcd";
+        System.out.println("Lexicographically smallest substring: " + findMaxChainLength(input));
     }
 
 }
