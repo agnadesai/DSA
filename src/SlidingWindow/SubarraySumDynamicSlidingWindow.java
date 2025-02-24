@@ -1,5 +1,7 @@
 package SlidingWindow;
-
+//Given an integer array nums, find the
+//subarray
+// with the largest sum, and return its sum.
 public class SubarraySumDynamicSlidingWindow {
 
     public static void main(String[] args) {
