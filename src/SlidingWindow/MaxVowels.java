@@ -1,5 +1,7 @@
 package SlidingWindow;
 
+import java.util.Set;
+
 class Solution {
     public int maxVowels(String s, int k) {
         Set<Character> vowels = Set.of('a','e','i','o','u');
