@@ -21,5 +21,6 @@ public class FindSubstringThatMatchWord {
         String s = "barfoofoobarthefoobarman";
         String[] words = {"bar","foo","the"};
         List<Integer> solution = solution(s, words);
+
     }
 }
