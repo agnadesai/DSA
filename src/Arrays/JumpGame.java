@@ -2,7 +2,7 @@ package Arrays;
 
 public class JumpGame {
     public static void main(String[] args) {
-        int[] array = new int[]{1,2,3};
+        int[] array = new int[]{2,3,1,1,4};
         String[] str = new String[]{"A", "B"};
 
         extracted(array);
@@ -12,6 +12,7 @@ public class JumpGame {
         int lastPosition = array[array.length-1];
 
         for(int i = lastPosition; i>=0; i--) {
+            System.out.println("i "+ i + " array of i " + array[i] + " last position " + lastPosition);
             if(i+ array[i] >= lastPosition) {
                 lastPosition = i;
             }

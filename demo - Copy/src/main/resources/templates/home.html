@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Vacation Management</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="row mb-4">
+            <div class="col">
+                <h2>Vacation Requests</h2>
+            </div>
+            <div class="col-auto" sec:authorize="hasRole('EMPLOYEE')">
+                <div class="alert alert-info">
+                    Remaining Vacation Days: <strong th:text="${remainingDays}">30</strong>
+                </div>
+            </div>
+            <div class="col-auto" sec:authorize="hasRole('EMPLOYEE')">
+                <a href="/request/new" class="btn btn-primary">New Request</a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Days</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="request : ${requests}">
+                        <td th:text="${request.id}">1</td>
+                        <td th:text="${request.author.username}">john</td>
+                        <td th:text="${#temporals.format(request.vacationStartDate, 'yyyy-MM-dd')}">2025-05-01</td>
+                        <td th:text="${#temporals.format(request.vacationEndDate, 'yyyy-MM-dd')}">2025-05-05</td>
+                        <td th:text="${request.vacationDays}">5</td>
+                        <td>
+                            <span th:class="${'badge ' + 
+                                (request.status == T(com.example.demo.model.RequestStatus).APPROVED ? 'bg-success' : 
+                                (request.status == T(com.example.demo.model.RequestStatus).REJECTED ? 'bg-danger' : 'bg-warning'))}"
+                                th:text="${request.status}">
+                                PENDING
+                            </span>
+                        </td>
+                        <td th:text="${#temporals.format(request.requestCreatedAt, 'yyyy-MM-dd HH:mm')}">2025-04-27 10:00</td>
+                        <td>
+                            <a th:href="@{/request/{id}(id=${request.id})}" class="btn btn-sm btn-info">View</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(requests)}">
+                        <td colspan="8" class="text-center">No vacation requests found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

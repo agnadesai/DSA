@@ -14,6 +14,7 @@ public class ReverseLinkedList {
             System.out.println("test" + list.get(i));
         }
 
-
+        String[] s = {"s", "t"};
+        int[] a = {1,2};
     }
 }

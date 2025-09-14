@@ -1,0 +1,20 @@
+# Git
+.git
+.gitignore
+
+
+# IDEs and editors
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+.project
+.classpath
+.settings/
+
+# Misc
+*.log
+*.swp
+*.bak
+.DS_Store

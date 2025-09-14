@@ -2,6 +2,10 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/jwt-demo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/oa-coder" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/spring-boot-h2-jpa-thymeleaf-customer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/spring-boot-h2-jpa-thymeleaf-customer/spring-mvc-rest-api-h2-thymeleaf" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/vacations-api-1-qmqzyl" vcs="Git" />
   </component>
 </project>

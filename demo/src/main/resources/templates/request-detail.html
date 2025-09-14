@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Vacation Request Details</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <h2 class="mb-4">Vacation Request Details</h2>
+        
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h5>Request Information</h5>
+                        <dl class="row">
+                            <dt class="col-sm-4">Employee</dt>
+                            <dd class="col-sm-8" th:text="${request.author.username}"></dd>
+                            
+                            <dt class="col-sm-4">Start Date</dt>
+                            <dd class="col-sm-8" th:text="${#temporals.format(request.vacationStartDate, 'yyyy-MM-dd')}"></dd>
+                            
+                            <dt class="col-sm-4">End Date</dt>
+                            <dd class="col-sm-8" th:text="${#temporals.format(request.vacationEndDate, 'yyyy-MM-dd')}"></dd>
+                            
+                            <dt class="col-sm-4">Vacation Days</dt>
+                            <dd class="col-sm-8" th:text="${request.vacationDays}"></dd>
+                            
+                            <dt class="col-sm-4">Status</dt>
+                            <dd class="col-sm-8">
+                                <span th:class="${'badge bg-' + 
+                                    (request.status == T(com.example.demo.model.RequestStatus).PENDING ? 'warning' : 
+                                    (request.status == T(com.example.demo.model.RequestStatus).APPROVED ? 'success' : 'danger'))}"
+                                    th:text="${request.status}">
+                                </span>
+                            </dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h5>Additional Information</h5>
+                        <dl class="row">
+                            <dt class="col-sm-4">Created At</dt>
+                            <dd class="col-sm-8" th:text="${#temporals.format(request.requestCreatedAt, 'yyyy-MM-dd HH:mm')}"></dd>
+                            
+                            <dt class="col-sm-4">Comment</dt>
+                            <dd class="col-sm-8" th:text="${request.comment ?: 'No comment provided'}"></dd>
+                            
+                            <dt class="col-sm-4" th:if="${request.resolvedBy}">Resolved By</dt>
+                            <dd class="col-sm-8" th:if="${request.resolvedBy}" th:text="${request.resolvedBy.username}"></dd>
+                            
+                            <dt class="col-sm-4" th:if="${request.resolvedAt}">Resolved At</dt>
+                            <dd class="col-sm-8" th:if="${request.resolvedAt}" 
+                                th:text="${#temporals.format(request.resolvedAt, 'yyyy-MM-dd HH:mm')}"></dd>
+                        </dl>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="/" class="btn btn-secondary">Back</a>
+                    
+                    <div sec:authorize="hasRole('MANAGER')" th:if="${request.status.name() == 'PENDING'}">
+                        <form th:action="@{/request/{id}/process(id=${request.id})}" method="post" class="d-inline">
+                            <input type="hidden" name="status" value="APPROVED">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+                        <form th:action="@{/request/{id}/process(id=${request.id})}" method="post" class="d-inline">
+                            <input type="hidden" name="status" value="REJECTED">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="scripts">
+        <script>
+            $(document).ready(function() {
+                // Add confirmation for approve/reject actions
+                $('form').on('submit', function(e) {
+                    const action = $(this).find('input[name="status"]').val().toLowerCase();
+                    if (!confirm(`Are you sure you want to ${action} this request?`)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

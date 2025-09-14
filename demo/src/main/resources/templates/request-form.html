@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Vacation Request</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <h2 class="mb-4">New Vacation Request</h2>
+        
+        <form th:action="@{/request/save}" method="post" id="vacationForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="startDate" name="vacationStartDate" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="endDate" name="vacationEndDate" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="comment" class="form-label">Comment (Optional)</label>
+                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <p>Vacation Days: <span id="vacationDays">0</span></p>
+                <div id="dateError" class="alert alert-danger" style="display: none;">
+                    End date must be after or equal to start date
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="/" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </div>
+        </form>
+    </div>
+
+    <div th:fragment="scripts">
+        <script>
+            $(document).ready(function() {
+                function calculateVacationDays() {
+                    const startDate = new Date($('#startDate').val());
+                    const endDate = new Date($('#endDate').val());
+                    
+                    if (startDate && endDate) {
+                        if (startDate > endDate) {
+                            $('#dateError').show();
+                            $('#vacationDays').text('0');
+                            return false;
+                        }
+                        
+                        $('#dateError').hide();
+                        const diffTime = Math.abs(endDate - startDate);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                        $('#vacationDays').text(diffDays);
+                        return true;
+                    }
+                    return false;
+                }
+
+                $('#startDate, #endDate').on('change', calculateVacationDays);
+
+                $('#vacationForm').on('submit', function(e) {
+                    if (!calculateVacationDays()) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

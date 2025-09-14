@@ -10,7 +10,9 @@ public class TopKElements {
         int nums[] = {4,4,4, 5, 5, 6,6,6,6,6};
         int  k = 2;
         int[] ans = topKElements(nums, k);
-        System.out.println("ans" + ans);
+        for(int i =0 ; i < ans.length; i++) {
+            System.out.println("ans" + ans[i]);
+        }
     }
 
     public static int[] topKElements(int[] nums, int k) {

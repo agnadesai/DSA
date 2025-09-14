@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Vacation Request Details</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="row">
+            <div class="col">
+                <h2>Vacation Request Details</h2>
+            </div>
+            <div class="col-auto">
+                <a href="/" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="card-title">Request Information</h5>
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 150px;">Request ID:</th>
+                                <td th:text="${request.id}">1</td>
+                            </tr>
+                            <tr>
+                                <th>Employee:</th>
+                                <td th:text="${request.author.username}">john</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    <span th:class="${'badge ' + 
+                                        (request.status == T(com.example.demo.model.RequestStatus).APPROVED ? 'bg-success' : 
+                                        (request.status == T(com.example.demo.model.RequestStatus).REJECTED ? 'bg-danger' : 'bg-warning'))}"
+                                        th:text="${request.status}">
+                                        PENDING
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Created At:</th>
+                                <td th:text="${#temporals.format(request.requestCreatedAt, 'yyyy-MM-dd HH:mm')}">
+                                    2025-04-27 10:00
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="card-title">Vacation Period</h5>
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 150px;">Start Date:</th>
+                                <td th:text="${#temporals.format(request.vacationStartDate, 'yyyy-MM-dd')}">
+                                    2025-05-01
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>End Date:</th>
+                                <td th:text="${#temporals.format(request.vacationEndDate, 'yyyy-MM-dd')}">
+                                    2025-05-05
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Total Days:</th>
+                                <td th:text="${request.vacationDays}">5</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mt-3" th:if="${request.comment}">
+                    <div class="col-12">
+                        <h5 class="card-title">Comment</h5>
+                        <p class="card-text" th:text="${request.comment}">
+                            Request comment goes here...
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mt-4" sec:authorize="hasRole('MANAGER')" 
+                     th:if="${request.status == T(com.example.demo.model.RequestStatus).PENDING}">
+                    <div class="col-12">
+                        <h5 class="card-title">Process Request</h5>
+                        <form th:action="@{/request/{id}/process(id=${request.id})}" method="post" class="d-inline">
+                            <input type="hidden" name="status" value="APPROVED">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+                        <form th:action="@{/request/{id}/process(id=${request.id})}" method="post" class="d-inline">
+                            <input type="hidden" name="status" value="REJECTED">
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
